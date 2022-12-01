@@ -11,7 +11,7 @@ template<typename K, typename V>
 class HashMap {
 
 
-	int bucketSize = 8;
+	int bucketSize = 10;
 	int capacity; 
 	const double MAX_LOAD_FACTOR = 0.80;
 	vector<list<pair<K, V>*>> hashTable; // seperate chaining
