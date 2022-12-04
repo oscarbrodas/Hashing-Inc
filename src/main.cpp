@@ -25,10 +25,10 @@ int main(int argc, char* args[]) {
                     break;
                 }
 
-                for (auto b : display.getCB())
+                for (auto b : display.getCButtons())
                     b.handle_event(display.getEvent(), display.getRenderer());
 
-                for (auto b : display.getDSB())
+                for (auto b : display.getDSButtons())
                     b.handle_event(display.getEvent());
 
 

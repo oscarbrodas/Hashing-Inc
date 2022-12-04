@@ -11,6 +11,8 @@
 Interface::Interface() {
 
     // Establishes window
+    SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
     window = SDL_CreateWindow("Hashing Inc.",
                               SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED,
@@ -27,7 +29,11 @@ Interface::Interface() {
     map_rect.x = 100; map_rect.y = 125; map_rect.w = 495; map_rect.h = 421;
     text_rect.x = 100; text_rect.y = 270; text_rect.w = 235; text_rect.h = 70;
     title_rect.x = 265; title_rect.y = 5; title_rect.w = 550; title_rect.h = 100;
-    table_rect.x = 650; table_rect.y = 100; table_rect.w = 425; table_rect.h = 600;
+    table_rect1.x = 650; table_rect1.y = 100; table_rect1.w = 425; table_rect1.h = 600;
+    table_rect2.x = 670; table_rect2.y = 175; table_rect2.w = 375; table_rect2.h = 25;
+    button_rect.x = 120; button_rect.y = 625; button_rect.w = 235; button_rect.h = 70;
+    time_rect.x = 150; time_rect.y = 650; time_rect.w = 110; time_rect.h = 25;
+
 
     // Load all buttons
     loadButtons();
@@ -41,6 +47,7 @@ void Interface::updateSurface() {
     renderBackground();
     renderTable();
     renderButtons();
+    renderText();
 
     SDL_RenderPresent(renderer);
 
@@ -61,12 +68,21 @@ void Interface::loadImages() {
     menu_text = SDL_CreateTextureFromSurface(renderer, image_loader);
     SDL_FreeSurface(image_loader);
 
+    image_loader = IMG_Load("../Textures/button.png");
+    box_text = SDL_CreateTextureFromSurface(renderer, image_loader);
+    SDL_FreeSurface(image_loader);
+
+    font = TTF_OpenFont("../Textures/font/Montserrat-Regular.ttf",24);
+    image_loader = TTF_RenderText_Solid(font, "Time:     ms", {255,255,255});
+    time_text = SDL_CreateTextureFromSurface(renderer, image_loader);
+    SDL_FreeSurface(image_loader);
+
     image_loader = IMG_Load("../Textures/title.png");
     title_text = SDL_CreateTextureFromSurface(renderer, image_loader);
     SDL_FreeSurface(image_loader);
 
     image_loader = IMG_Load("../Textures/Table.png");
-    table_text = SDL_CreateTextureFromSurface(renderer, image_loader);
+    table_text1 = SDL_CreateTextureFromSurface(renderer, image_loader);
 
     SDL_FreeSurface(image_loader);
     image_loader = nullptr;
@@ -105,12 +121,8 @@ void Interface::loadButtons() {
     // Creates DS Buttons
     data_structure_button DSB1(15, 550, 235, 70, renderer);
     data_structure_button DSB2(235, 550, 235, 70, renderer);
-    data_structure_button DSB3(15, 620, 235, 70, renderer);
-    data_structure_button DSB4(235, 620, 235, 70, renderer);
     data_structure_buttons.push_back(DSB1);
     data_structure_buttons.push_back(DSB2);
-    data_structure_buttons.push_back(DSB3);
-    data_structure_buttons.push_back(DSB4);
 
 }
 
@@ -137,20 +149,21 @@ void Interface::renderBackground() {
     // Renders map
     SDL_RenderCopy(renderer, map_text, nullptr, &map_rect);
 
-    // Writes text Box and title
+    // Writes text box, title box, and time box
     SDL_RenderCopy(renderer, menu_text, nullptr, &text_rect);
     SDL_RenderCopy(renderer, title_text, nullptr, &title_rect);
+    SDL_RenderCopy(renderer, box_text, nullptr, &button_rect);
 
 }
 
 void Interface::renderTable() {
 
-    SDL_RenderCopy(renderer, table_text, nullptr, &table_rect);
+    SDL_RenderCopy(renderer, table_text1, nullptr, &table_rect1);
 
-    // RENDER TEXT
+    // Renders table values
 
 
-
+    SDL_FreeSurface(image_loader);
 
 }
 
@@ -170,6 +183,15 @@ void Interface::renderButtons() {
 
 }
 
+void Interface::renderText() {
+
+    SDL_RenderCopy(renderer, box_text, nullptr, &button_rect);
+    SDL_RenderCopy(renderer, time_text, nullptr, &time_rect);
+
+}
+
+
+
 
 bool Interface::pollForEvent() {
     return SDL_PollEvent(&event);
@@ -180,11 +202,11 @@ SDL_Event* Interface::getEvent() {
     return &event;
 }
 
-std::vector<data_structure_button> Interface::getDSB() {
+std::vector<data_structure_button> Interface::getDSButtons() {
     return data_structure_buttons;
 }
 
-std::vector<coordinate_button> Interface::getCB() {
+std::vector<coordinate_button> Interface::getCButtons() {
     return coordinate_buttons;
 }
 
@@ -213,6 +235,8 @@ void Interface::close() {
     window = nullptr;
 
     SDL_Quit();
+    TTF_CloseFont(font);
+    TTF_Quit();
 }
 
 
