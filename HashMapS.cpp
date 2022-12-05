@@ -241,8 +241,7 @@ list<prS*>::iterator HashMapS::search(const string& key, list<prS*>& chain)
 void HashMapS::rehash()
 {
 	bucketSize *= 2;
-	vector<list<prS*>> newHashTable; // Create a new table, of double the size
-	newHashTable.resize(bucketSize);
+	vector<list<prS*>> newHashTable(bucketSize); // Create a new table, of double the size
 
 	for (unsigned int i = 0; i < hashTable.size(); i++) // For each list,
 	{

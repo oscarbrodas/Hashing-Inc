@@ -244,16 +244,17 @@ list<prD*>::iterator HashMapD::search(const double& key, list<prD*>& chain)
 void HashMapD::rehash()
 {
 	bucketSize *= 2;
-	vector<list<prD*>> newHashTable; // Create a new table, of double the size
-	newHashTable.resize(bucketSize);
+	vector<list<prD*>> newHashTable(bucketSize); // Create a new table, of double the size
 
 	for (unsigned int i = 0; i < hashTable.size(); i++) // For each list,
 	{
 		list<prD*>& chain = hashTable.at(i);
 		for (auto it = chain.begin(); it != chain.end(); it++) // For each pair,
 		{
-			int key = (*it)->first;
+			double key = (*it)->first;
 			int value = (*it)->second;
+
+			int integerKey = keyToInt(key);
 
 			int index = hashFunction(key);
 
