@@ -7,7 +7,7 @@
 #include <iostream>
 #include "Interface.h"
 
-
+// Constructs necessary variables and SDL window
 Interface::Interface() {
 
     // Establishes window
@@ -30,17 +30,17 @@ Interface::Interface() {
     text_rect.x = 100; text_rect.y = 270; text_rect.w = 235; text_rect.h = 70;
     title_rect.x = 265; title_rect.y = 5; title_rect.w = 550; title_rect.h = 100;
     table_rect1.x = 650; table_rect1.y = 100; table_rect1.w = 425; table_rect1.h = 600;
-    table_rect2.x = 670; table_rect2.y = 175; table_rect2.w = 375; table_rect2.h = 25;
     button_rect.x = 120; button_rect.y = 625; button_rect.w = 235; button_rect.h = 70;
     time_rect.x = 150; time_rect.y = 650; time_rect.w = 110; time_rect.h = 25;
-
 
     // Load all buttons
     loadButtons();
 
+    table->loadFont(font);
 }
 
-void Interface::updateSurface() {
+// Calls functions to update window
+void Interface::updateWindow() {
 
     SDL_RenderClear(renderer);
 
@@ -53,6 +53,19 @@ void Interface::updateSurface() {
 
 }
 
+// Updates table values
+void Interface::updateTable(vector<vector<double>>& dataNumeric, vector<string>& dataString) {
+    table->update_values(dataNumeric, dataString);
+}
+
+// ========= Loading Functions ========== //
+/*
+ * These functions load and render different
+ * aspects of the interface.
+ *
+ */
+
+// Loads images for rendering
 void Interface::loadImages() {
 
     image_loader = SDL_LoadBMP("../Textures/Ocean.bmp");
@@ -89,6 +102,7 @@ void Interface::loadImages() {
 
 }
 
+// Loads button objects for interface
 void Interface::loadButtons() {
 
     // Creates Coordinate Boxes --- I'm actually sorry. There has to be a more efficient way to do this but idk.
@@ -126,8 +140,7 @@ void Interface::loadButtons() {
 
 }
 
-
-
+// Renders moving background and other aspects
 void Interface::renderBackground() {
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0xFF, SDL_ALPHA_OPAQUE);
@@ -156,17 +169,18 @@ void Interface::renderBackground() {
 
 }
 
+// Renders table image
 void Interface::renderTable() {
 
     SDL_RenderCopy(renderer, table_text1, nullptr, &table_rect1);
 
-    // Renders table values
-
+    table->write_table(renderer, image_loader);
 
     SDL_FreeSurface(image_loader);
 
 }
 
+// Renders buttons to screen
 void Interface::renderButtons() {
 
     int x, y;
@@ -177,12 +191,13 @@ void Interface::renderButtons() {
         if (x >= b.getBox().x && x <= b.getBox().x + b.getBox().w && y >= b.getBox().y && y <= b.getBox().y + b.getBox().h)
             b.render(renderer);
 
-    // Renders 4 lower left buttons
+    // Renders 2 lower left buttons
     for (auto& b : data_structure_buttons)
         b.render(renderer);
 
 }
 
+// Renders other text
 void Interface::renderText() {
 
     SDL_RenderCopy(renderer, box_text, nullptr, &button_rect);
@@ -191,12 +206,16 @@ void Interface::renderText() {
 }
 
 
-
+// ========== Interface Functions ========== //
+/*
+ * These functions poll for events for the display
+ * and access parts of the display for usage.
+ *
+ */
 
 bool Interface::pollForEvent() {
     return SDL_PollEvent(&event);
 }
-
 
 SDL_Event* Interface::getEvent() {
     return &event;
@@ -214,6 +233,10 @@ SDL_Renderer*& Interface::getRenderer() {
     return renderer;
 }
 
+TTF_Font* Interface::getFont() {
+    return font;
+}
+
 bool Interface::isOpen() {
     return window;
 }
@@ -222,6 +245,7 @@ Interface::~Interface() {
     close();
 }
 
+// Uninitializes Memory
 void Interface::close() {
 
     // Deallocate surfaces
@@ -238,5 +262,7 @@ void Interface::close() {
     TTF_CloseFont(font);
     TTF_Quit();
 }
+
+
 
 
