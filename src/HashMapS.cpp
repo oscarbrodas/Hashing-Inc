@@ -203,7 +203,20 @@ int HashMapS::hashA(const int& key) // Mid Square Method Implmentation
 }
 int HashMapS::hashB(const int& key)
 {
-	return key;
+	string keyS = to_string(key);
+	int sum = 0;
+	while(keyS.size()>0){
+		if(keyS.size()>=2) {
+			sum += stoi(keyS.substr(0,2));
+			keyS = keyS.substr(2,keyS.size()-2);
+		}
+		else{
+			sum += stoi(keyS.substr(0,1));
+			keyS = "";
+		}
+	}
+
+	return sum;
 }
 int HashMapS::reduce(const int& hashCode)
 {
@@ -228,8 +241,7 @@ list<prS*>::iterator HashMapS::search(const string& key, list<prS*>& chain)
 void HashMapS::rehash()
 {
 	bucketSize *= 2;
-	vector<list<prS*>> newHashTable; // Create a new table, of double the size
-	newHashTable.resize(bucketSize);
+	vector<list<prS*>> newHashTable(bucketSize); // Create a new table, of double the size
 
 	for (unsigned int i = 0; i < hashTable.size(); i++) // For each list,
 	{

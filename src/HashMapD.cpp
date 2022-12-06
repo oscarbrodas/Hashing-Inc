@@ -203,7 +203,20 @@ int HashMapD::hashA(const int& key)  //Mid Square Method Implementation
 }
 int HashMapD::hashB(const int& key)
 {
-	return key; // PlaceHolder
+	string keyS = to_string(key);
+	int sum = 0;
+	while(keyS.size()>0){
+		if(keyS.size()>=2) {
+			sum += stoi(keyS.substr(0,2));
+			keyS = keyS.substr(2,keyS.size()-2);
+		}
+		else{
+			sum += stoi(keyS.substr(0,1));
+			keyS = "";
+		}
+	}
+
+	return sum;
 }
 int HashMapD::reduce(const int& hashCode)
 {
@@ -231,16 +244,17 @@ list<prD*>::iterator HashMapD::search(const double& key, list<prD*>& chain)
 void HashMapD::rehash()
 {
 	bucketSize *= 2;
-	vector<list<prD*>> newHashTable; // Create a new table, of double the size
-	newHashTable.resize(bucketSize);
+	vector<list<prD*>> newHashTable(bucketSize); // Create a new table, of double the size
 
 	for (unsigned int i = 0; i < hashTable.size(); i++) // For each list,
 	{
 		list<prD*>& chain = hashTable.at(i);
 		for (auto it = chain.begin(); it != chain.end(); it++) // For each pair,
 		{
-			int key = (*it)->first;
+			double key = (*it)->first;
 			int value = (*it)->second;
+
+			int integerKey = keyToInt(key);
 
 			int index = hashFunction(key);
 

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <ctime>
 #include "SDL.h"
 #include "Interface.h"
 #include "HashMapD.h"
@@ -57,6 +58,7 @@ int main(int argc, char* args[]) {
     else cout << "file did not open\n";
 
     Interface display;
+    clock_t timer;
 
     if (!display.isOpen())
         cout << "Failed to create window. Error: " << SDL_GetError() << endl;
@@ -83,16 +85,26 @@ int main(int argc, char* args[]) {
 
                 // Use search function to get vectors of data based on table
                 if (display.getEvent()->type == SDL_MOUSEBUTTONDOWN)
-                    if (tmp.first != 0 && tmp.second != 0 && (loc.first != tmp.first && loc.second != tmp.second)) {
+                    if (loc.first != tmp.first && loc.second != tmp.second) {
                         loc = tmp;
+
+                        // Start Time
+                        timer = clock();
+
+                        // Gather data
                         numericData = mostFrequentConditions(loc, sectors, HASH);
                         stringData = weatherMostFrequent(loc, sectors, HASH);
 
-                        // update table based on location
+                        // End Time, Update Timer
+                        timer = clock() - timer;
+                        display.updateTime(timer);
+
+                        // Update table based on location
                         display.updateTable(numericData, stringData);
                     }
 
-                 loc = {0,0};
+                loc.first = 0;
+                loc.second = 0;
 
             }
 
@@ -100,10 +112,7 @@ int main(int argc, char* args[]) {
                 for (auto b : display.getDSButtons())
                     b.handle_event(display.getEvent(), HASH);
             }
-
-
-
-
+            
         }
 
     }
