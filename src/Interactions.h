@@ -53,7 +53,11 @@ public:
 
 class data_structure_button : button {
 public:
-    SDL_Texture* texture = nullptr;
+    SDL_Rect box2 {
+        box2.x = 250,  box2.y = 550, box2.w = 235, box2.h = 70
+    };
+    SDL_Texture* hash1 = nullptr;
+    SDL_Texture* hash2 = nullptr;
 
     data_structure_button(int x, int y, int w, int h, SDL_Renderer*& renderer);
 
@@ -63,28 +67,34 @@ public:
 
 };
 
-class dynamic_table {
+class dynamic_text {
 private:
     TTF_Font* font = nullptr;
-    std::vector<double> dist, temp;
-    std::vector<int> humidity, vis;
+    std::vector<double> dist;
+    std::vector<int> temp, humidity, vis;
     std::vector<std::string> weather;
+    int time = 0;
 
     SDL_Texture* texture;
+
+    // Table and time rect
     SDL_Rect d1, d2, d3, d4, d5, d6, d7, d8, d9, d10;
     SDL_Rect t1, t2, t3, t4, t5, t6, t7, t8, t9, t10;
     SDL_Rect h1, h2, h3, h4, h5, h6, h7, h8, h9, h10;
     SDL_Rect v1, v2, v3, v4, v5, v6, v7, v8, v9, v10;
     SDL_Rect w1, w2, w3, w4, w5, w6, w7, w8, w9, w10;
+    SDL_Rect timeRect;
 
 public:
-    dynamic_table();
+    dynamic_text();
 
     void loadFont(TTF_Font* font);
 
     void write_table(SDL_Renderer*& renderer, SDL_Surface*& text_surface);
+    void write_time(SDL_Renderer*& renderer, SDL_Surface*& text_surface);
 
     void update_values(vector<vector<double>> dataNumeric, vector<string> dataString);
+    void update_time(int time);
 
 };
 

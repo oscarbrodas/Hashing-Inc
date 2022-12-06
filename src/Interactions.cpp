@@ -2,6 +2,8 @@
 
 #include <SDL_image.h>
 #include "Interface.h"
+#include "Interactions.h"
+
 #include <iostream>
 
 // ---------- Interaction Functions ---------- //
@@ -30,6 +32,7 @@ void button::handle_event(SDL_Event* e) {
     int x, y;
     bool inside = true;
 
+    // Updates box based on mouse cursor
     if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP) {
 
         SDL_GetMouseState(&x, &y);
@@ -103,15 +106,18 @@ SDL_Rect coordinate_button::getBox() {
 data_structure_button::data_structure_button(int x, int y, int w, int h, SDL_Renderer*& renderer) : button(x, y, w, h) {
     data_structure_button::set_position(x, y);
 
-    loaded_image = IMG_Load("../Textures/button.png");
-    texture = SDL_CreateTextureFromSurface(renderer, loaded_image);
+    loaded_image = IMG_Load("../Textures/hashbutton1.png");
+    hash1 = SDL_CreateTextureFromSurface(renderer, loaded_image);
+    loaded_image = IMG_Load("../Textures/hashbutton2.png");
+    hash2 = SDL_CreateTextureFromSurface(renderer, loaded_image);
     SDL_FreeSurface(loaded_image);
     loaded_image = nullptr;
 
 }
 
 void data_structure_button::render(SDL_Renderer*& renderer) {
-    SDL_RenderCopy(renderer, texture, nullptr, &box);
+    SDL_RenderCopy(renderer, hash1, nullptr, &box);
+    SDL_RenderCopy(renderer, hash2, nullptr, &box2);
 }
 
 void data_structure_button::handle_event(SDL_Event* e, bool& HASH) {
@@ -123,13 +129,9 @@ void data_structure_button::handle_event(SDL_Event* e, bool& HASH) {
     // Changes hash based on which button clicked
     if (sprite == button_mouse_down) {
 
-        if (sprite == button_mouse_down) {
+        if (x >= 15 && x <= 250) HASH = true;
+        else if (x >= 255 && x <= 485) HASH = false;
 
-            if (x >= 15 && x <= 250) HASH = true;
-            else if (x >= 250 && x <= 470) HASH = false;
-
-
-        }
     }
 }
 
@@ -143,13 +145,13 @@ void data_structure_button::set_position(int x, int y) {
  * Much of these lines are repeated code for
  * the 50 boxes and updating values.
  */
-dynamic_table::dynamic_table() {
+dynamic_text::dynamic_text() {
 
     for (int i = 0; i < 10; i++) {
         dist.push_back(0);
-        temp.push_back(70.00);
-        humidity.push_back(100);
-        vis.push_back(10);
+        temp.push_back(0);
+        humidity.push_back(0);
+        vis.push_back(0);
         weather.emplace_back("N/A");
     }
 
@@ -165,38 +167,38 @@ dynamic_table::dynamic_table() {
     d9.x = 670; d9.y = 575; d9.w = 65; d9.h = 25;
     d10.x = 670; d10.y = 625; d10.w = 65; d10.h = 25;
 
-    h1.x = 760; h1.y = 175; h1.w = 30; h1.h = 25;
-    h2.x = 760; h2.y = 225; h2.w = 30; h2.h = 25;
-    h3.x = 760; h3.y = 275; h3.w = 30; h3.h = 25;
-    h4.x = 760; h4.y = 325; h4.w = 30; h4.h = 25;
-    h5.x = 760; h5.y = 375; h5.w = 30; h5.h = 25;
-    h6.x = 760; h6.y = 425; h6.w = 30; h6.h = 25;
-    h7.x = 760; h7.y = 475; h7.w = 30; h7.h = 25;
-    h8.x = 760; h8.y = 525; h8.w = 30; h8.h = 25;
-    h9.x = 760; h9.y = 575; h9.w = 30; h9.h = 25;
-    h10.x = 760; h10.y = 625; h10.w = 30; h10.h = 25;
+    h1.x = 760; h1.y = 175; h1.w = 30; h1.h = 30;
+    h2.x = 760; h2.y = 225; h2.w = 30; h2.h = 30;
+    h3.x = 760; h3.y = 275; h3.w = 30; h3.h = 30;
+    h4.x = 760; h4.y = 325; h4.w = 30; h4.h = 30;
+    h5.x = 760; h5.y = 375; h5.w = 30; h5.h = 30;
+    h6.x = 760; h6.y = 425; h6.w = 30; h6.h = 30;
+    h7.x = 760; h7.y = 475; h7.w = 30; h7.h = 30;
+    h8.x = 760; h8.y = 525; h8.w = 30; h8.h = 30;
+    h9.x = 760; h9.y = 575; h9.w = 30; h9.h = 30;
+    h10.x = 760; h10.y = 625; h10.w = 30; h10.h = 30;
 
-    t1.x = 820; t1.y = 175; t1.w = 65; t1.h = 25;
-    t2.x = 820; t2.y = 225; t2.w = 65; t2.h = 25;
-    t3.x = 820; t3.y = 275; t3.w = 65; t3.h = 25;
-    t4.x = 820; t4.y = 325; t4.w = 65; t4.h = 25;
-    t5.x = 820; t5.y = 375; t5.w = 65; t5.h = 25;
-    t6.x = 820; t6.y = 425; t6.w = 65; t6.h = 25;
-    t7.x = 820; t7.y = 475; t7.w = 65; t7.h = 25;
-    t8.x = 820; t8.y = 525; t8.w = 65; t8.h = 25;
-    t9.x = 820; t9.y = 575; t9.w = 65; t9.h = 25;
-    t10.x = 820; t10.y = 625; t10.w = 65; t10.h = 25;
+    t1.x = 840; t1.y = 175; t1.w = 30; t1.h = 30;
+    t2.x = 840; t2.y = 225; t2.w = 30; t2.h = 30;
+    t3.x = 840; t3.y = 275; t3.w = 30; t3.h = 30;
+    t4.x = 840; t4.y = 325; t4.w = 30; t4.h = 30;
+    t5.x = 840; t5.y = 375; t5.w = 30; t5.h = 30;
+    t6.x = 840; t6.y = 425; t6.w = 30; t6.h = 30;
+    t7.x = 840; t7.y = 475; t7.w = 30; t7.h = 30;
+    t8.x = 840; t8.y = 525; t8.w = 30; t8.h = 30;
+    t9.x = 840; t9.y = 575; t9.w = 30; t9.h = 30;
+    t10.x = 840; t10.y = 625; t10.w = 30; t10.h = 30;
 
-    v1.x = 920; v1.y = 175; v1.w = 30; v1.h = 25;
-    v2.x = 920; v2.y = 225; v2.w = 30; v2.h = 25;
-    v3.x = 920; v3.y = 275; v3.w = 30; v3.h = 25;
-    v4.x = 920; v4.y = 325; v4.w = 30; v4.h = 25;
-    v5.x = 920; v5.y = 375; v5.w = 30; v5.h = 25;
-    v6.x = 920; v6.y = 425; v6.w = 30; v6.h = 25;
-    v7.x = 920; v7.y = 475; v7.w = 30; v7.h = 25;
-    v8.x = 920; v8.y = 525; v8.w = 30; v8.h = 25;
-    v9.x = 920; v9.y = 575; v9.w = 30; v9.h = 25;
-    v10.x = 920; v10.y = 625; v10.w = 30; v10.h = 25;
+    v1.x = 920; v1.y = 175; v1.w = 30; v1.h = 30;
+    v2.x = 920; v2.y = 225; v2.w = 30; v2.h = 30;
+    v3.x = 920; v3.y = 275; v3.w = 30; v3.h = 30;
+    v4.x = 920; v4.y = 325; v4.w = 30; v4.h = 30;
+    v5.x = 920; v5.y = 375; v5.w = 30; v5.h = 30;
+    v6.x = 920; v6.y = 425; v6.w = 30; v6.h = 30;
+    v7.x = 920; v7.y = 475; v7.w = 30; v7.h = 30;
+    v8.x = 920; v8.y = 525; v8.w = 30; v8.h = 30;
+    v9.x = 920; v9.y = 575; v9.w = 30; v9.h = 30;
+    v10.x = 920; v10.y = 625; v10.w = 30; v10.h = 30;
 
     w1.x = 975; w1.y = 175; w1.w = 65; w1.h = 25;
     w2.x = 975; w2.y = 225; w2.w = 65; w2.h = 25;
@@ -209,17 +211,18 @@ dynamic_table::dynamic_table() {
     w9.x = 975; w9.y = 575; w9.w = 65; w9.h = 25;
     w10.x = 975; w10.y = 625; w10.w = 65; w10.h = 25;
 
+    timeRect.x = 230; timeRect.y = 645; timeRect.w = 40; timeRect.h = 30;
+
 }
 
-void dynamic_table::loadFont(TTF_Font* font) {
+void dynamic_text::loadFont(TTF_Font* font) {
     this->font = font;
 }
 
 // Renders all table values to screen
-void dynamic_table::write_table(SDL_Renderer*& renderer, SDL_Surface*& text_surface) {
+void dynamic_text::write_table(SDL_Renderer*& renderer, SDL_Surface*& text_surface) {
 
     // Makes 50 boxes
-
     text_surface = TTF_RenderText_Solid(font, std::to_string(dist.at(0)).c_str(),{255,255,255});
     texture = SDL_CreateTextureFromSurface(renderer, text_surface);
     SDL_RenderCopy(renderer, texture, nullptr, &d1);
@@ -430,7 +433,8 @@ void dynamic_table::write_table(SDL_Renderer*& renderer, SDL_Surface*& text_surf
 
 }
 
-void dynamic_table::update_values(vector<vector<double>> dataNumeric, vector<string> dataString) {
+// Updates table values
+void dynamic_text::update_values(vector<vector<double>> dataNumeric, vector<string> dataString) {
 
     dist.clear();
     for (auto i : dataNumeric[0])
@@ -457,6 +461,33 @@ void dynamic_table::update_values(vector<vector<double>> dataNumeric, vector<str
         weather.push_back(i);
     while (weather.size() < 10) weather.emplace_back("N/A");
 
+
+}
+
+// Updates time
+void dynamic_text::update_time(int time) {
+    this->time = time;
+}
+
+// Renders time value to screen
+void dynamic_text::write_time(SDL_Renderer*& renderer, SDL_Surface*& text_surface) {
+
+    if (abs(time) >= 0 && abs(time) <= 99) {
+        timeRect.w = 20;
+        timeRect.h = 30;
+    }
+    else if (abs(time) >= 100 && abs(time) <= 9999){
+        timeRect.w = 40;
+        timeRect.h = 30;
+    }
+    else {
+        timeRect.w = 50;
+        timeRect.h = 30;
+    }
+
+    text_surface = TTF_RenderText_Solid(font, to_string(time).c_str(),{255,255,255});
+    texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+    SDL_RenderCopy(renderer, texture, nullptr, &timeRect);
 
 }
 

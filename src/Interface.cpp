@@ -30,8 +30,8 @@ Interface::Interface() {
     text_rect.x = 100; text_rect.y = 270; text_rect.w = 235; text_rect.h = 70;
     title_rect.x = 265; title_rect.y = 5; title_rect.w = 550; title_rect.h = 100;
     table_rect1.x = 650; table_rect1.y = 100; table_rect1.w = 425; table_rect1.h = 600;
-    button_rect.x = 120; button_rect.y = 625; button_rect.w = 235; button_rect.h = 70;
-    time_rect.x = 150; time_rect.y = 650; time_rect.w = 110; time_rect.h = 25;
+    button_rect.x = 130; button_rect.y = 625; button_rect.w = 235; button_rect.h = 70;
+    time_rect.x = 155; time_rect.y = 645; time_rect.w = 180; time_rect.h = 30;
 
     // Load all buttons
     loadButtons();
@@ -48,6 +48,7 @@ void Interface::updateWindow() {
     renderTable();
     renderButtons();
     renderText();
+    renderTime();
 
     SDL_RenderPresent(renderer);
 
@@ -57,6 +58,12 @@ void Interface::updateWindow() {
 void Interface::updateTable(vector<vector<double>>& dataNumeric, vector<string>& dataString) {
     table->update_values(dataNumeric, dataString);
 }
+
+// Update timer
+void Interface::updateTime(int time) {
+    table->update_time(time);
+}
+
 
 // ========= Loading Functions ========== //
 /*
@@ -86,7 +93,7 @@ void Interface::loadImages() {
     SDL_FreeSurface(image_loader);
 
     font = TTF_OpenFont("../Textures/font/Montserrat-Regular.ttf",24);
-    image_loader = TTF_RenderText_Solid(font, "Time:     ms", {255,255,255});
+    image_loader = TTF_RenderText_Solid(font, "Time:           ms", {255,255,255});
     time_text = SDL_CreateTextureFromSurface(renderer, image_loader);
     SDL_FreeSurface(image_loader);
 
@@ -134,7 +141,7 @@ void Interface::loadButtons() {
 
     // Creates DS Buttons
     data_structure_button DSB1(15, 550, 235, 70, renderer);
-    data_structure_button DSB2(235, 550, 235, 70, renderer);
+    data_structure_button DSB2(250, 550, 235, 70, renderer);
     data_structure_buttons.push_back(DSB1);
     data_structure_buttons.push_back(DSB2);
 
@@ -175,6 +182,15 @@ void Interface::renderTable() {
     SDL_RenderCopy(renderer, table_text1, nullptr, &table_rect1);
 
     table->write_table(renderer, image_loader);
+
+    SDL_FreeSurface(image_loader);
+
+}
+
+// Renders time
+void Interface::renderTime() {
+
+    table->write_time(renderer, image_loader);
 
     SDL_FreeSurface(image_loader);
 
@@ -233,10 +249,6 @@ SDL_Renderer*& Interface::getRenderer() {
     return renderer;
 }
 
-TTF_Font* Interface::getFont() {
-    return font;
-}
-
 bool Interface::isOpen() {
     return window;
 }
@@ -245,7 +257,7 @@ Interface::~Interface() {
     close();
 }
 
-// Uninitializes Memory
+// Uninitializes Memory and SDL
 void Interface::close() {
 
     // Deallocate surfaces

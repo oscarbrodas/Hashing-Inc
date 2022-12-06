@@ -15,13 +15,11 @@
 class Interface {
 private:
     const int SCREEN_WIDTH = 1080, SCREEN_HEIGHT = 720;
-    dynamic_table* table = new dynamic_table();
-    float time = 0.00f;
+    dynamic_text* table = new dynamic_text();
 
     SDL_Window* window = nullptr;
 
     SDL_Surface* window_surface = nullptr;
-    SDL_Surface* text_surface = nullptr;
     SDL_Surface* image_loader = nullptr;
 
     SDL_Texture* bg_text = nullptr;
@@ -42,11 +40,12 @@ private:
     SDL_Rect ani_rect1, ani_rect2, map_rect, text_rect, title_rect;
     SDL_Rect table_rect1, time_rect, button_rect;
 
-
     SDL_Event event;
 
+    // Rendering Functions
     void renderBackground();
     void renderTable();
+    void renderTime();
     void renderButtons();
     void renderText();
 
@@ -59,7 +58,6 @@ public:
     bool pollForEvent();
     SDL_Event* getEvent();
     SDL_Renderer*& getRenderer();
-    TTF_Font* getFont();
     std::vector<data_structure_button> getDSButtons();
     std::vector<coordinate_button> getCButtons();
 
@@ -68,6 +66,7 @@ public:
     void loadButtons();
     void updateWindow();
     void updateTable(vector<vector<double>>& dataNumeric, vector<string>& dataString);
+    void updateTime(int time);
 
     bool isOpen();
     void close();
