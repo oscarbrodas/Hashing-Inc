@@ -7,7 +7,6 @@ set(SDL2_LIB_DIR C:/libs/SDL2-2.26.1/lib/x64)
 include_directories(${SDL2_INCLUDE_DIR})
 link_directories(${SDL2_LIB_DIR})
 
-
 set(SDL2_IMAGE_INCLUDE_DIR C:/libs/SDL2_image-2.6.2/include)
 set(SDL2_IMAGE_LIB_DIR C:/libs/SDL2_image-2.6.2/lib/x64)
 include_directories(${SDL2_IMAGE_INCLUDE_DIR})
@@ -24,10 +23,12 @@ add_executable(
         src/Interface.h
         src/Interactions.h
         src/Interactions.cpp
+        src/datapoint.h
+        src/HashMapD.h
+        src/HashMapD.cpp
+        src/HashMapS.h
+        src/HashMapS.cpp
         )
-
-
-
 
 target_link_libraries(FinalProject SDL2Main SDL2 SDL2_image SDL2_ttf)
 
