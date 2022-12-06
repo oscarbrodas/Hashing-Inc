@@ -10,7 +10,9 @@ frequent values for that sector. The two hashing buttons
 in the lower left corner change the hashing functions
 for the hashmaps used in data retreval and the timer
 represents how much time it took to retreive a set
-of data from the maps.
+of data from the maps. The data set includes over
+400,000 pieces of data for our program which the 
+user can interact with.
 
 The entire interface was made using SDL_Library.
 
